@@ -17,7 +17,7 @@ type infoprops ={
 
 
 export const Card = (props: infoprops) => {
-    console.log("get", props.infomation?.restaurants)
+    console.log("get", props.infomation.restaurants)
     
 
 
