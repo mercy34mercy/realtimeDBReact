@@ -3,10 +3,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { getDatabase, ref, set, get, child } from "firebase/database";
 import './App.css';
-import axios from 'axios';
 import { Card } from './Card';
-import { InferTypeNode } from 'typescript';
-import { async } from '@firebase/util';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAopZTSO6fDpfHhyQ5csKE1MSTwxDLV7eg",
@@ -22,17 +19,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const database = getDatabase(app)
 
-const writedata = (userid: string) => {
+const writedata = (urls: string) => {
   const db = getDatabase()
   set(ref(db, 'users/' + "123/" + String(Math.floor(Math.random() * 100000))), {
-    id: userid
+    url: urls
   });
 }
 
 const App = () => {
 
   const [inputvalue, setinputvalue] = React.useState("")
-  const [restauraunt, setrestaurant] = React.useState("")
+  const [firedata, setfiredata] = React.useState("")
 
   type restaurantinfo = {
     logo: string,
@@ -54,14 +51,19 @@ const App = () => {
     restaurants:a
   }
 
-  const [getValue, setgetValue] = React.useState<info>(b) 
+  const [getValue, setgetValue] = React.useState<restaurantinfo[]>(a) 
 
 
 
   const dbRef = ref(getDatabase());
   get(child(dbRef, 'users/123')).then((DataSnapshot) => {
     if (DataSnapshot.exists()) {
-      console.log(DataSnapshot.val());
+      // console.log(DataSnapshot.val());
+      DataSnapshot.forEach((element: any) => {
+        console.log(element.val())
+      })
+
+
     } else {
       console.log("No data available");
     }
@@ -74,22 +76,18 @@ const App = () => {
     const access = async () => {
       const response = await fetch("https://tabecardhotpepper.azurewebsites.net/");
       const body = await response.json();
-      console.log("body",body)
-      const res = JSON.parse(JSON.stringify(body)) as info
-      setgetValue(res)
-      console.log("rest", res)
-      getValue.restaurants.forEach((game, index) => {
-        console.log("logo",game)
+      const responsejson:restaurantinfo[] = body["data"]
+      responsejson.forEach((elements,index) => {
+        const data: restaurantinfo = {
+          logo: elements.logo,
+          name: elements.name,
+          photo: elements.photo
+        }
+        getValue.push(data)
       })
     }
     access();
   }, []);
-
-  useEffect(() => {
-    const a = dbRef;
-
-  })
-
  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,13 +97,14 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        {/* <input type="text" value={inputvalue} onChange={handleChange} />
-        <button onClick={() => writedata(inputvalue)}>{inputvalue}</button>
-        <button onClick={() => dbRef}>フェッチ</button> */}
+        <button onClick={() => writedata(getValue[1].logo)}>送信</button>
       </header>
       <body>
         <div>
-        {String(getValue.restaurants[1])}
+          {/* {getValue[1].logo} */}
+        </div>
+        <div>
+          {firedata}
         </div>
       </body>
     </div>

@@ -7,23 +7,21 @@ type restaurantinfo = {
     photo: string
 }
 
-type info = {
-    restaurants: restaurantinfo[]
-}
+
 
 type infoprops ={
-    infomation:info
+    infomation:restaurantinfo[]
 }
 
 
 export const Card = (props: infoprops) => {
-    console.log("get", props.infomation.restaurants)
+    console.log("get", props.infomation)
     
 
 
     return (
         <div>
-            <p>{ props.infomation.restaurants[0].logo }</p>
+            <p>{ props.infomation[1].logo }</p>
         </div>
     )
 }
