@@ -17,19 +17,23 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig)
-const database = getDatabase(app)
+const db = getDatabase(app)
 
-const writedata = (urls: string) => {
-  const db = getDatabase()
-  set(ref(db, 'users/' + "123/" + String(Math.floor(Math.random() * 100000))), {
-    url: urls
-  });
-}
+
 
 const App = () => {
-
+  const [senddata,setsenddata] = React.useState("")
+  const [roomid,setroomid] = React.useState("")
   const [inputvalue, setinputvalue] = React.useState("")
-  const [firedata, setfiredata] = React.useState("")
+  const [firedata, setfiredata] = React.useState<string[]>([])
+
+  const writedata = (urls: string) => {
+    const db = getDatabase()
+    set(ref(db, 'users/' + roomid + "/"+String(Math.floor(Math.random() * 100000))), {
+      url: urls
+    });
+  }
+
 
   type restaurantinfo = {
     logo: string,
@@ -56,11 +60,12 @@ const App = () => {
 
 
   const dbRef = ref(getDatabase());
-  get(child(dbRef, 'users/123')).then((DataSnapshot) => {
+  get(child(dbRef, 'users/'+roomid+"/")).then((DataSnapshot) => {
     if (DataSnapshot.exists()) {
       // console.log(DataSnapshot.val());
       DataSnapshot.forEach((element: any) => {
-        console.log(element.val())
+        console.log(element.val().id)
+        firedata.push(String(element.val().url))
       })
 
 
@@ -93,15 +98,26 @@ const App = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setinputvalue(() => e.target.value)
   }
+  const roomhandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setroomid(() => e.target.value)
+  }
+  const senddatahandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setsenddata(() => e.target.value)
+  }
 
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={() => writedata(getValue[1].logo)}>送信</button>
+        <button onClick={() => writedata(senddata)}>送信</button>
       </header>
       <body>
         <div>
-          {/* {getValue[1].logo} */}
+          <p>送信データ</p>
+          <input type="text" value={senddata} onChange={senddatahandleChange}  />
+        </div>
+        <div>
+          <p>roomid</p>
+          <input type="text" value={roomid} onChange={roomhandleChange} />
         </div>
         <div>
           {firedata}
