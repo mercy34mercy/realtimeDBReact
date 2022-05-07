@@ -65,7 +65,9 @@ const App = () => {
       // console.log(DataSnapshot.val());
       DataSnapshot.forEach((element: any) => {
         console.log(element.val().id)
-        firedata.push(String(element.val().url))
+        if(element.val().url != undefined){
+          firedata.push(String(element.val().url))
+        }
       })
 
 
