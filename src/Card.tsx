@@ -1,13 +1,10 @@
 import React from 'react';
 
-
 type restaurantinfo = {
     logo: string,
     name: string,
     photo: string
 }
-
-
 
 type infoprops ={
     infomation:restaurantinfo[]
@@ -16,8 +13,6 @@ type infoprops ={
 
 export const Card = (props: infoprops) => {
     console.log("get", props.infomation)
-    
-
 
     return (
         <div>

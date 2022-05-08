@@ -40,20 +40,12 @@ const App = () => {
     name: string,
     photo: string
   }
-
-  type info = {
-    restaurants: restaurantinfo[]
-  }
-
+  
   const a: restaurantinfo[] = [{
     name: "a",
     logo: "b",
     photo:"s"
   }]
-
-  const b: info = {
-    restaurants:a
-  }
 
   const [getValue, setgetValue] = React.useState<restaurantinfo[]>(a) 
 
