@@ -5,21 +5,37 @@ import './Tinder.css'
 const db = [
   {
     name: 'Richard Hendricks',
-    url: 'https://dummyimage.com/600x400/aaa/fff'
+    img: 'https://dummyimage.com/600x400/aaa/fff'
   },
   {
     name: 'Erlich Bachman',
-    url: 'https://dummyimage.com/600x400/aaa/fff'
+    img: 'https://dummyimage.com/600x400/aaa/fff'
   },
 ]
 
-function Tinder (db) {
+type restaurantinfo = {
+  logo: string,
+  name: string,
+  photo: string
+}
+
+type infoprops = {
+  information: restaurantinfo[]
+  parehandlechange: any
+  parecardnumber: number
+}
+
+function Tinder (props: infoprops) {
+  let db:restaurantinfo[]
+  db = props.information
+  console.log("information")
+  console.log(db)
   const [currentIndex, setCurrentIndex] = useState(db.length - 1)
   const [lastDirection, setLastDirection] = useState()
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex)
 
-  const childRefs = useMemo(
+  const childRefs= useMemo<Array[number] >(
     () =>
       Array(db.length)
         .fill(0)
@@ -27,7 +43,7 @@ function Tinder (db) {
     []
   )
 
-  const updateCurrentIndex = (val) => {
+  const updateCurrentIndex = (val:number) => {
     setCurrentIndex(val)
     currentIndexRef.current = val
   }
@@ -37,21 +53,29 @@ function Tinder (db) {
   const canSwipe = currentIndex >= 0
 
   // set last direction and decrease current index
-  const swiped = (direction, nameToDelete, index) => {
+  const swiped = (direction:React.SetStateAction<undefined>, nameToDelete:any, index:number) => {
     setLastDirection(direction)
     updateCurrentIndex(index - 1)
   }
 
-  const outOfFrame = (name, idx) => {
+  const outOfFrame = (name:string, idx:number) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current)
     // handle the case in which go back is pressed before card goes outOfFrame
-    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
+    // let childRefs:React.RefObject<unknown>[] = []
+    // const childRef = React.createRef();
+    // const childRefs:React.RefObject<unknown>[]
+    // childRefs.push(childRef)
+    if (childRefs[idx].current === null) return;
+    else{
+      currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
+
+    }
     // TODO: when quickly swipe and restore multiple times the same card,
     // it happens multiple outOfFrame events are queued and the card disappear
     // during latest swipes. Only the last outOfFrame event should be considered valid
   }
 
-  const swipe = async (dir) => {
+  const swipe = async (dir:number) => {
     if (canSwipe && currentIndex < db.length) {
       await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
     }
@@ -82,11 +106,11 @@ function Tinder (db) {
             ref={childRefs[index]}
             className='swipe'
             key={character.name}
-            onSwipe={(dir) => swiped(dir, character.name, index)}
+            onSwipe={(dir:Direction) => swiped(dir, character.name, index)}
             onCardLeftScreen={() => outOfFrame(character.name, index)}
           >
             <div
-              style={{ backgroundImage: 'url(' + character.url + ')' }}
+              style={{ backgroundImage: 'url(' + character.img + ')' }}
               className='card'
             >
               <h3>{character.name}</h3>

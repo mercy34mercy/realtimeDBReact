@@ -1,12 +1,5 @@
 import React from 'react';
-// import "./Card.css"
-// // Import Swiper React components
-// import { Swiper, SwiperSlide } from "swiper/react";
-// // Import Swiper styles
-// import "swiper/css";
-// import "swiper/css/effect-cards";
-// // import required modules
-// import { EffectCards } from "swiper";
+import Tinder from './Tinder'
 
 type restaurantinfo = {
     logo: string,
@@ -15,7 +8,7 @@ type restaurantinfo = {
 }
 
 type infoprops = {
-    infomation: restaurantinfo[]
+    information: restaurantinfo[]
     parehandlechange: any
     parecardnumber: number
 }
@@ -45,11 +38,12 @@ export const Card = (props: infoprops) => {
         return (
             <div className={cardClass}>
                 <p>
-                    {props.infomation[cardnum].name}
+                    {props.information[cardnum].name}
                 </p>
                 <p>
-                    <img src={props.infomation[cardnum].photo} alt="" />
+                    <img src={props.information[cardnum].photo} alt="" />
                 </p>
+                <Tinder information={props.information}></Tinder>
             </div>
 
         )
