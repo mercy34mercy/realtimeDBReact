@@ -26,7 +26,8 @@ const App = () => {
   const [roomid,setroomid] = React.useState("")
   const [inputvalue, setinputvalue] = React.useState("")
   const [firedata, setfiredata] = React.useState<string[]>([])
-
+  const [cardnumber, setcardnumber] = React.useState<number>(1)
+  
   const writedata = (urls: string) => {
     const db = getDatabase()
     set(ref(db, 'users/' + roomid + "/"+String(Math.floor(Math.random() * 100000))), {
@@ -50,29 +51,35 @@ const App = () => {
   const [getValue, setgetValue] = React.useState<restaurantinfo[]>(a) 
 
 
+  useEffect(() => {
+    const dbRef = ref(getDatabase());
+    get(child(dbRef, 'users/' + roomid + "/")).then((DataSnapshot) => {
+      if (DataSnapshot.exists()) {
+        // console.log(DataSnapshot.val());
+        DataSnapshot.forEach((element: any) => {
+          console.log(element.val().id)
+          if (element.val().url != undefined) {
+            firedata.push(String(element.val().url))
+          }
+        })
+        // setfiredata(firedata)
+        console.log("firebaseと通信")
 
-  const dbRef = ref(getDatabase());
-  get(child(dbRef, 'users/'+roomid+"/")).then((DataSnapshot) => {
-    if (DataSnapshot.exists()) {
-      // console.log(DataSnapshot.val());
-      DataSnapshot.forEach((element: any) => {
-        console.log(element.val().id)
-        if(element.val().url != undefined){
-          firedata.push(String(element.val().url))
-        }
-      })
-
-
-    } else {
-      console.log("No data available");
+      } else {
+        console.log("No data available");
+      }
     }
-  }
-  ).catch((error) => {
+    ).catch((error) => {
 
-  });
+    });
+    console.log(firedata)
+  }, [cardnumber])
+
+
 
   useEffect(() => { 
     const access = async () => {
+      setgetValue([])
       const response = await fetch("https://tabecardhotpepper.azurewebsites.net/");
       const body = await response.json();
       const responsejson:restaurantinfo[] = body["data"]
@@ -84,6 +91,7 @@ const App = () => {
         }
         getValue.push(data)
       })
+      setgetValue(getValue)
     }
     access();
   }, []);
@@ -99,26 +107,59 @@ const App = () => {
     setsenddata(() => e.target.value)
   }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <button onClick={() => writedata(senddata)}>送信</button>
-      </header>
-      <body>
-        <div>
-          <p>送信データ</p>
-          <input type="text" value={senddata} onChange={senddatahandleChange}  />
-        </div>
-        <div>
-          <p>roomid</p>
-          <input type="text" value={roomid} onChange={roomhandleChange} />
-        </div>
-        <div>
-          {firedata}
-        </div>
-      </body>
-    </div>
-  );
+  const renderfire = firedata.map((fire,index) => {
+    return (
+      <p>
+        {Array.from(new Set(firedata))[index]}
+      </p>
+    )
+  })
+
+  if (getValue.length <= 5) {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <button onClick={() => writedata(senddata)}>送信</button>
+        </header>
+        <body>
+          <div>
+            <p>送信データ</p>
+            <input type="text" value={senddata} onChange={senddatahandleChange} />
+          </div>
+          <div>
+            <p>roomid</p>
+            <input type="text" value={roomid} onChange={roomhandleChange} />
+          </div>
+          <div>
+            {firedata}
+          </div>
+        </body>
+      </div>
+    )
+  } else {
+
+    return (
+      <div className="App">
+        <header className="App-header">
+        </header>
+        <body>
+          <div>
+          <button onClick={() => writedata(getValue[cardnumber].name)}>送信</button>
+          </div>
+          <div>
+            <p>roomid</p>
+            <input type="text" value={roomid} onChange={roomhandleChange} />
+          </div>
+          <div>
+            {renderfire}
+          </div>
+          <div>
+            <Card infomation={Array.from(new Set(getValue))} parecardnumber={cardnumber} parehandlechange={setcardnumber}></Card>
+          </div>
+        </body>
+      </div>
+    );
+  }
 }
 
 export default App;

@@ -7,16 +7,53 @@ type restaurantinfo = {
 }
 
 type infoprops ={
-    infomation:restaurantinfo[]
+    infomation: restaurantinfo[]
+    parehandlechange: any
+    parecardnumber:number
 }
 
 
 export const Card = (props: infoprops) => {
-    console.log("get", props.infomation)
+   
+
+    const cardview = (cardnum:number) => {
+        return (
+            <div>
+                <p>
+                    {props.infomation[cardnum].name}
+                </p>
+                <p>
+                    <img src={props.infomation[cardnum].photo} alt="" />
+                </p>
+            </div>
+        )
+    }
 
     return (
         <div>
-            <p>{ props.infomation[1].logo }</p>
+            {cardview(props.parecardnumber)}
+            <CountupButton handlechange={props.parehandlechange} cardnum={props.parecardnumber}></CountupButton>
+        </div>
+    )
+}
+
+type CountupButtonprops = {
+    handlechange: any
+    cardnum:number
+}
+
+
+export const CountupButton = (props:CountupButtonprops) => {
+    const clickbutton = () => {
+        props.handlechange(props.cardnum + 1)
+    }
+    const clickbuttonback = () => {
+        props.handlechange(props.cardnum -1)
+    }
+    return (
+        <div>
+            <button onClick={clickbuttonback}>戻る</button>
+            <button onClick={clickbutton}>次</button>
         </div>
     )
 }
