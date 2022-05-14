@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react'
 // import TinderCard from '../react-tinder-card/index'
-import TinderCard from './react-tinder-card/index'
+import TinderCard from 'react-tinder-card'
 import './Tinder.css'
 const db = [
   {
@@ -11,21 +11,9 @@ const db = [
     name: 'Erlich Bachman',
     url: 'https://dummyimage.com/600x400/aaa/fff'
   },
-  {
-    name: 'Monica Hall',
-    url: 'https://dummyimage.com/600x400/aaa/fff'
-  },
-  {
-    name: 'Jared Dunn',
-    url: 'https://dummyimage.com/600x400/aaa/fff'
-  },
-  {
-    name: 'Dinesh Chugtai',
-    url: 'https://dummyimage.com/600x400/aaa/fff'
-  }
 ]
 
-function Tinder () {
+function Tinder (db) {
   const [currentIndex, setCurrentIndex] = useState(db.length - 1)
   const [lastDirection, setLastDirection] = useState()
   // used for outOfFrame closure
@@ -107,6 +95,7 @@ function Tinder () {
         ))}
       </div>
       <div className='buttons'>
+        <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('up')}>Swipe up!</button>
         <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('left')}>Swipe left!</button>
         <button style={{ backgroundColor: !canGoBack && '#c3c4d3' }} onClick={() => goBack()}>Undo swipe!</button>
         <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('right')}>Swipe right!</button>
