@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { getDatabase, ref, set, get, child } from "firebase/database";
 import './App.css';
 import { Card } from './Card';
+import  Tinder  from './Tinder'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAopZTSO6fDpfHhyQ5csKE1MSTwxDLV7eg",
@@ -17,7 +18,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig)
-const db = getDatabase(app)
+// const db = getDatabase(app)
 
 
 
@@ -109,9 +110,11 @@ const App = () => {
 
   const renderfire = firedata.map((fire,index) => {
     return (
-      <p>
-        {Array.from(new Set(firedata))[index]}
-      </p>
+      <div className="resultCard">
+        <p>
+          {Array.from(new Set(firedata))[index]}
+        </p>
+      </div>
     )
   })
 
@@ -156,6 +159,7 @@ const App = () => {
           <div>
             <Card infomation={Array.from(new Set(getValue))} parecardnumber={cardnumber} parehandlechange={setcardnumber}></Card>
           </div>
+          <Tinder></Tinder>
         </body>
       </div>
     );
