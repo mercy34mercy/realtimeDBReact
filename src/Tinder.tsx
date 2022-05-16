@@ -2,6 +2,7 @@ import React, { useState, useMemo, useRef } from 'react'
 // import TinderCard from '../react-tinder-card/index'
 import TinderCard from 'react-tinder-card'
 import './Tinder.css'
+declare type Direction = 'left' | 'right' | 'up' | 'down'
 const db = [
   {
     name: 'Richard Hendricks',
@@ -31,11 +32,11 @@ function Tinder (props: infoprops) {
   console.log("information")
   console.log(db)
   const [currentIndex, setCurrentIndex] = useState(db.length - 1)
-  const [lastDirection, setLastDirection] = useState()
+  const [lastDirection, setLastDirection] = useState<Direction>()
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex)
 
-  const childRefs= useMemo<Array[number] >(
+  const childRefs= useMemo(
     () =>
       Array(db.length)
         .fill(0)
@@ -53,7 +54,7 @@ function Tinder (props: infoprops) {
   const canSwipe = currentIndex >= 0
 
   // set last direction and decrease current index
-  const swiped = (direction:React.SetStateAction<undefined>, nameToDelete:any, index:number) => {
+  const swiped = (direction:React.SetStateAction<Direction | undefined>, nameToDelete:any, index:number) => {
     setLastDirection(direction)
     updateCurrentIndex(index - 1)
   }
@@ -75,7 +76,7 @@ function Tinder (props: infoprops) {
     // during latest swipes. Only the last outOfFrame event should be considered valid
   }
 
-  const swipe = async (dir:number) => {
+  const swipe = async (dir:string|number) => {
     if (canSwipe && currentIndex < db.length) {
       await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
     }
@@ -110,7 +111,7 @@ function Tinder (props: infoprops) {
             onCardLeftScreen={() => outOfFrame(character.name, index)}
           >
             <div
-              style={{ backgroundImage: 'url(' + character.img + ')' }}
+              style={{ backgroundImage: 'url(' + character.photo + ')' }}
               className='card'
             >
               <h3>{character.name}</h3>
@@ -119,11 +120,17 @@ function Tinder (props: infoprops) {
         ))}
       </div>
       <div className='buttons'>
+        <button onClick={() => swipe('up')}>Swipe up!</button>
+        <button onClick={() => swipe('left')}>Swipe left!</button>
+        <button onClick={() => goBack()}>Undo swipe!</button>
+        <button onClick={() => swipe('right')}>Swipe right!</button>
+      </div>
+      {/* <div className='buttons'>
         <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('up')}>Swipe up!</button>
         <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('left')}>Swipe left!</button>
         <button style={{ backgroundColor: !canGoBack && '#c3c4d3' }} onClick={() => goBack()}>Undo swipe!</button>
         <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('right')}>Swipe right!</button>
-      </div>
+      </div> */}
       {lastDirection ? (
         <h2 key={lastDirection} className='infoText'>
           You swiped {lastDirection}
