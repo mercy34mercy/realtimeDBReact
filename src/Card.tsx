@@ -43,7 +43,7 @@ export const Card = (props: infoprops) => {
                 <p>
                     <img src={props.information[cardnum].photo} alt="" />
                 </p>
-                <Tinder information={props.information}></Tinder>
+                
             </div>
 
         )
@@ -51,6 +51,7 @@ export const Card = (props: infoprops) => {
 
     return (
         <div>
+            <Tinder db={props.information}></Tinder>
             {cardview(props.parecardnumber)}
             <CountupButton handlechange={props.parehandlechange} cardnum={props.parecardnumber}></CountupButton>
             

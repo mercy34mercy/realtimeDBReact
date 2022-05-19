@@ -1,83 +1,60 @@
 import React, { useState, useMemo, useRef } from 'react'
 // import TinderCard from '../react-tinder-card/index'
 import TinderCard from 'react-tinder-card'
-import './Tinder.css'
-declare type Direction = 'left' | 'right' | 'up' | 'down'
-const db = [
-  {
-    name: 'Richard Hendricks',
-    img: 'https://dummyimage.com/600x400/aaa/fff'
-  },
-  {
-    name: 'Erlich Bachman',
-    img: 'https://dummyimage.com/600x400/aaa/fff'
-  },
-]
 
-type restaurantinfo = {
-  logo: string,
-  name: string,
-  photo: string
-}
 
-type infoprops = {
-  information: restaurantinfo[]
-  parehandlechange: any
-  parecardnumber: number
-}
-
-function Tinder (props: infoprops) {
-  let db:restaurantinfo[]
-  db = props.information
-  console.log("information")
-  console.log(db)
-  const [currentIndex, setCurrentIndex] = useState(db.length - 1)
-  const [lastDirection, setLastDirection] = useState<Direction>()
+function Advanced (props) {
+  // let db = [
+  //   {
+  //     logo: "string",
+  //     name: "string",
+  //     photo: "string"
+  // }
+  // ]
+  let db = props.db
+  // console.log("props.information",props.information)
+  console.log("db",db)
+  let dbLength = db.length
+  console.log("length", dbLength)
+  const [currentIndex, setCurrentIndex] = useState(dbLength - 1)
+  const [lastDirection, setLastDirection] = useState()
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex)
 
-  const childRefs= useMemo(
+  const childRefs = useMemo(
     () =>
-      Array(db.length)
+      Array(dbLength)
         .fill(0)
         .map((i) => React.createRef()),
     []
   )
 
-  const updateCurrentIndex = (val:number) => {
+  const updateCurrentIndex = (val) => {
     setCurrentIndex(val)
     currentIndexRef.current = val
   }
 
-  const canGoBack = currentIndex < db.length - 1
+  const canGoBack = currentIndex < dbLength - 1
 
   const canSwipe = currentIndex >= 0
 
   // set last direction and decrease current index
-  const swiped = (direction:React.SetStateAction<Direction | undefined>, nameToDelete:any, index:number) => {
+  const swiped = (direction, nameToDelete, index) => {
     setLastDirection(direction)
     updateCurrentIndex(index - 1)
   }
 
-  const outOfFrame = (name:string, idx:number) => {
+  const outOfFrame = (name, idx) => {
     console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current)
     // handle the case in which go back is pressed before card goes outOfFrame
-    // let childRefs:React.RefObject<unknown>[] = []
-    // const childRef = React.createRef();
-    // const childRefs:React.RefObject<unknown>[]
-    // childRefs.push(childRef)
-    if (childRefs[idx].current === null) return;
-    else{
-      currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
-
-    }
+    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
     // TODO: when quickly swipe and restore multiple times the same card,
     // it happens multiple outOfFrame events are queued and the card disappear
     // during latest swipes. Only the last outOfFrame event should be considered valid
   }
 
-  const swipe = async (dir:string|number) => {
-    if (canSwipe && currentIndex < db.length) {
+  const swipe = async (dir) => {
+    if (canSwipe && currentIndex < dbLength) {
       await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
     }
   }
@@ -107,11 +84,11 @@ function Tinder (props: infoprops) {
             ref={childRefs[index]}
             className='swipe'
             key={character.name}
-            onSwipe={(dir:Direction) => swiped(dir, character.name, index)}
+            onSwipe={(dir) => swiped(dir, character.name, index)}
             onCardLeftScreen={() => outOfFrame(character.name, index)}
           >
             <div
-              style={{ backgroundImage: 'url(' + character.photo + ')' }}
+              style={{ backgroundImage: 'url(' + character.url + ')' }}
               className='card'
             >
               <h3>{character.name}</h3>
@@ -120,17 +97,10 @@ function Tinder (props: infoprops) {
         ))}
       </div>
       <div className='buttons'>
-        <button onClick={() => swipe('up')}>Swipe up!</button>
-        <button onClick={() => swipe('left')}>Swipe left!</button>
-        <button onClick={() => goBack()}>Undo swipe!</button>
-        <button onClick={() => swipe('right')}>Swipe right!</button>
-      </div>
-      {/* <div className='buttons'>
-        <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('up')}>Swipe up!</button>
         <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('left')}>Swipe left!</button>
         <button style={{ backgroundColor: !canGoBack && '#c3c4d3' }} onClick={() => goBack()}>Undo swipe!</button>
         <button style={{ backgroundColor: !canSwipe && '#c3c4d3' }} onClick={() => swipe('right')}>Swipe right!</button>
-      </div> */}
+      </div>
       {lastDirection ? (
         <h2 key={lastDirection} className='infoText'>
           You swiped {lastDirection}
@@ -144,4 +114,4 @@ function Tinder (props: infoprops) {
   )
 }
 
-export default Tinder
+export default Advanced

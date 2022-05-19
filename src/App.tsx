@@ -159,7 +159,6 @@ const App = () => {
           <div>
             <Card information={Array.from(new Set(getValue))} parecardnumber={cardnumber} parehandlechange={setcardnumber}></Card>
           </div>
-          <Tinder></Tinder>
         </body>
       </div>
     );
