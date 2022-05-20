@@ -1,18 +1,9 @@
 import React, { useState, useMemo, useRef } from 'react'
-// import TinderCard from '../react-tinder-card/index'
 import TinderCard from 'react-tinder-card'
-
+import './Tinder.css'
 
 function Advanced (props) {
-  // let db = [
-  //   {
-  //     logo: "string",
-  //     name: "string",
-  //     photo: "string"
-  // }
-  // ]
   let db = props.db
-  // console.log("props.information",props.information)
   console.log("db",db)
   let dbLength = db.length
   console.log("length", dbLength)
@@ -68,15 +59,15 @@ function Advanced (props) {
   }
 
   return (
-    <div>
-      <link
+    <div className='Tinder'>
+      {/* <link
         href='https://fonts.googleapis.com/css?family=Damion&display=swap'
         rel='stylesheet'
       />
       <link
         href='https://fonts.googleapis.com/css?family=Alatsi&display=swap'
         rel='stylesheet'
-      />
+      /> */}
       <h1>React Tinder Card</h1>
       <div className='cardContainer'>
         {db.map((character, index) => (
@@ -88,7 +79,7 @@ function Advanced (props) {
             onCardLeftScreen={() => outOfFrame(character.name, index)}
           >
             <div
-              style={{ backgroundImage: 'url(' + character.url + ')' }}
+              style={{ backgroundImage: 'url(' + character.photo + ')' }}
               className='card'
             >
               <h3>{character.name}</h3>
