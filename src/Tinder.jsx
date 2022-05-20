@@ -76,7 +76,7 @@ function Advanced (props) {
             className='swipe'
             key={character.name}
             onSwipe={(dir) => swiped(dir, character.name, index)}
-            onCardLeftScreen={() => outOfFrame(character.name, index)}
+            onCardLeftScreen={() => {outOfFrame(character.name, index);console.log(character);console.log("lastDirection");console.log(lastDirection)}}
           >
             <div
               style={{ backgroundImage: 'url(' + character.photo + ')' }}
