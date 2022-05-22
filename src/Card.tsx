@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Tinder from './Tinder'
 
 type restaurantinfo = {

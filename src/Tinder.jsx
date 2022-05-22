@@ -4,13 +4,15 @@ import './Tinder.css'
 
 function Advanced (props) {
   let db = props.db
-  console.log("db",db)
+  // console.log("db",db)
   let dbLength = db.length
-  console.log("length", dbLength)
+  // console.log("length", dbLength)
   const [currentIndex, setCurrentIndex] = useState(dbLength - 1)
   const [lastDirection, setLastDirection] = useState()
+  const [currenttime, setCurrenttime] = useState(Date.now())
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex)
+  const currentTimeRef    = useRef(currenttime)
 
   const childRefs = useMemo(
     () =>
@@ -19,6 +21,11 @@ function Advanced (props) {
         .map((i) => React.createRef()),
     []
   )
+
+  const updateCurrentTime = (time) => {
+    setCurrenttime(time)
+    currentTimeRef.current = time
+  }
 
   const updateCurrentIndex = (val) => {
     setCurrentIndex(val)
@@ -33,6 +40,13 @@ function Advanced (props) {
   const swiped = (direction, nameToDelete, index) => {
     setLastDirection(direction)
     updateCurrentIndex(index - 1)
+    
+    const time = Date.now()
+    const elapsedtime = currenttime - time
+    console.log(time, currentTimeRef.current, "currentindex", currentIndexRef.current)
+    console.log(nameToDelete, elapsedtime)
+    updateCurrentTime(time)
+
   }
 
   const outOfFrame = (name, idx) => {
@@ -42,6 +56,8 @@ function Advanced (props) {
     // TODO: when quickly swipe and restore multiple times the same card,
     // it happens multiple outOfFrame events are queued and the card disappear
     // during latest swipes. Only the last outOfFrame event should be considered valid
+    // ここで方向を取得して通信する
+
   }
 
   const swipe = async (dir) => {
