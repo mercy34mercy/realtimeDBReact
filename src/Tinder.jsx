@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react'
 import TinderCard from 'react-tinder-card'
 import './Tinder.css'
+import { getDatabase, ref, set } from "firebase/database";
 
 function Advanced (props) {
   let db = props.db
@@ -36,16 +37,27 @@ function Advanced (props) {
 
   const canSwipe = currentIndex >= 0
 
+  const writedata = (name,time) => {
+    const firedb = getDatabase()
+    set(ref(firedb, 'users/' + props.id + "/" + String(Math.floor(Math.random() * 100000))), {
+      restrauntname: name,
+      time:time
+    });
+  }
+
   // set last direction and decrease current index
   const swiped = (direction, nameToDelete, index) => {
     setLastDirection(direction)
     updateCurrentIndex(index - 1)
     
     const time = Date.now()
-    const elapsedtime = currenttime - time
-    console.log(time, currentTimeRef.current, "currentindex", currentIndexRef.current)
-    console.log(nameToDelete, elapsedtime)
+    const elapsedtime = time - currentTimeRef.current
+    console.log("経過時間", elapsedtime/1000)
     updateCurrentTime(time)
+    if (direction === "right"){
+      writedata(nameToDelete, elapsedtime)
+    }
+
 
   }
 

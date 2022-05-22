@@ -157,7 +157,7 @@ const App = () => {
             {renderfire}
           </div>
           <div>
-            <Card information={Array.from(new Set(getValue))} parecardnumber={cardnumber} parehandlechange={setcardnumber}></Card>
+            <Card information={Array.from(new Set(getValue))} parecardnumber={cardnumber} parehandlechange={setcardnumber} roomid={roomid}></Card>
           </div>
         </body>
       </div>

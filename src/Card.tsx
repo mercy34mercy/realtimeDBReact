@@ -11,6 +11,7 @@ type infoprops = {
     information: restaurantinfo[]
     parehandlechange: any
     parecardnumber: number
+    roomid:string
 }
 
 const samplefunc = (event: Event) => {
@@ -51,7 +52,7 @@ export const Card = (props: infoprops) => {
 
     return (
         <div>
-            <Tinder db={props.information}></Tinder>
+            <Tinder db={props.information} id={props.roomid}></Tinder>
             {cardview(props.parecardnumber)}
             <CountupButton handlechange={props.parehandlechange} cardnum={props.parecardnumber}></CountupButton>
             
