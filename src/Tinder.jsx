@@ -39,10 +39,15 @@ function Advanced (props) {
 
   const writedata = (name,time) => {
     const firedb = getDatabase()
-    set(ref(firedb, 'users/' + props.id + "/" + String(Math.floor(Math.random() * 100000))), {
-      restrauntname: name,
-      time:time
-    });
+    if (props.id === undefined || props.id.length < 1) {
+      console.log("ルームIDが設定されていません")
+    } else {
+      console.log("送信")
+      set(ref(firedb, 'users/' + String(props.id) + "/" + String(Math.floor(Math.random() * 100000))), {
+        restrauntname: name,
+        time: time
+      });
+    }
   }
 
   // set last direction and decrease current index

@@ -54,26 +54,30 @@ const App = () => {
 
   useEffect(() => {
     const dbRef = ref(getDatabase());
-    get(child(dbRef, 'users/' + roomid + "/")).then((DataSnapshot) => {
-      if (DataSnapshot.exists()) {
-        // console.log(DataSnapshot.val());
-        DataSnapshot.forEach((element: any) => {
-          console.log(element.val().id)
-          if (element.val().url != undefined) {
-            firedata.push(String(element.val().url))
-          }
-        })
-        // setfiredata(firedata)
-        console.log("firebaseと通信")
+    if (roomid === undefined || roomid.length < 1) {
+      
+    } else {
+      get(child(dbRef, 'users/' + roomid + "/")).then((DataSnapshot) => {
+        if (DataSnapshot.exists()) {
+          // console.log(DataSnapshot.val());
+          DataSnapshot.forEach((element: any) => {
+            console.log(element.val().id)
+            if (element.val().url != undefined) {
+              firedata.push(String(element.val().url))
+            }
+          })
+          // setfiredata(firedata)
+          console.log("firebaseと通信")
 
-      } else {
-        console.log("No data available");
+        } else {
+          console.log("No data available");
+        }
       }
-    }
-    ).catch((error) => {
+      ).catch((error) => {
 
-    });
-    console.log(firedata)
+      });
+      console.log(firedata)
+    }
   }, [cardnumber])
 
 
@@ -98,12 +102,6 @@ const App = () => {
   }, []);
  
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setinputvalue(() => e.target.value)
-  }
-  const roomhandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setroomid(() => e.target.value)
-  }
   const senddatahandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setsenddata(() => e.target.value)
   }
@@ -126,14 +124,6 @@ const App = () => {
         </header>
         <body>
           <div>
-            <p>送信データ</p>
-            <input type="text" value={senddata} onChange={senddatahandleChange} />
-          </div>
-          <div>
-            <p>roomid</p>
-            <input type="text" value={roomid} onChange={roomhandleChange} />
-          </div>
-          <div>
             {firedata}
           </div>
         </body>
@@ -148,10 +138,6 @@ const App = () => {
         <body>
           <div>
           <button onClick={() => writedata(getValue[cardnumber].name)}>送信</button>
-          </div>
-          <div>
-            <p>roomid</p>
-            <input type="text" value={roomid} onChange={roomhandleChange} />
           </div>
           <div>
             {renderfire}
