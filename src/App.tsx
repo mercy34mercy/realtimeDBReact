@@ -22,7 +22,7 @@ const app = initializeApp(firebaseConfig)
 
 
 
-const App = () => {
+export const App = () => {
   const [senddata,setsenddata] = React.useState("")
   const [roomid,setroomid] = React.useState("")
   const [inputvalue, setinputvalue] = React.useState("")

@@ -8,7 +8,7 @@ export const Start = () => {
     }
 
     return (
-                  < div >
+        < div >
             <p>roomid</p>
             <input type="text" value={roomid} onChange={roomhandleChange} />
         </div >
