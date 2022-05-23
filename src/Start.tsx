@@ -1,4 +1,5 @@
 import React from 'react';
+import "./Start.css"
 
 export const Start = () => {
     const [roomid, setroomid] = React.useState("")
@@ -8,9 +9,12 @@ export const Start = () => {
     }
 
     return (
-        < div >
+        < div className='start'>
             <p>roomid</p>
-            <input type="text" value={roomid} onChange={roomhandleChange} />
+            <div>
+                <input type="text" value={roomid} onChange={roomhandleChange} />
+            </div>
+            <button>スタート</button>
         </div >
     )
     
