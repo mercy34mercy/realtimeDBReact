@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import React from 'react';
+import { useLocation } from 'react-router';
 import { useEffect } from 'react';
 import { getDatabase, ref, set, get, child } from "firebase/database";
 import './App.css';
@@ -23,15 +24,16 @@ const app = initializeApp(firebaseConfig)
 
 
 export const App = () => {
+  const location = useLocation()
   const [senddata,setsenddata] = React.useState("")
-  const [roomid,setroomid] = React.useState("")
+  const [roomid, setroomid] = React.useState<{id:string}>(location.state as { id: string })
   const [inputvalue, setinputvalue] = React.useState("")
   const [firedata, setfiredata] = React.useState<string[]>([])
   const [cardnumber, setcardnumber] = React.useState<number>(1)
   
   const writedata = (urls: string) => {
     const db = getDatabase()
-    set(ref(db, 'users/' + roomid + "/"+String(Math.floor(Math.random() * 100000))), {
+    set(ref(db, 'users/' + roomid.id + "/"+String(Math.floor(Math.random() * 100000))), {
       url: urls
     });
   }
@@ -54,10 +56,11 @@ export const App = () => {
 
   useEffect(() => {
     const dbRef = ref(getDatabase());
-    if (roomid === undefined || roomid.length < 1) {
+    console.log(roomid.id)
+    if (roomid.id === undefined || roomid.id.length < 1) {
       
     } else {
-      get(child(dbRef, 'users/' + roomid + "/")).then((DataSnapshot) => {
+      get(child(dbRef, 'users/' + roomid.id + "/")).then((DataSnapshot) => {
         if (DataSnapshot.exists()) {
           // console.log(DataSnapshot.val());
           DataSnapshot.forEach((element: any) => {
@@ -66,7 +69,7 @@ export const App = () => {
               firedata.push(String(element.val().url))
             }
           })
-          // setfiredata(firedata)
+          setfiredata(firedata)
           console.log("firebaseと通信")
 
         } else {
@@ -137,13 +140,10 @@ export const App = () => {
         </header>
         <body>
           <div>
-          <button onClick={() => writedata(getValue[cardnumber].name)}>送信</button>
-          </div>
-          <div>
             {renderfire}
           </div>
           <div>
-            <Card information={Array.from(new Set(getValue))} parecardnumber={cardnumber} parehandlechange={setcardnumber} roomid={roomid}></Card>
+            <Card information={Array.from(new Set(getValue))} parecardnumber={cardnumber} parehandlechange={setcardnumber} roomid={roomid.id}></Card>
           </div>
         </body>
       </div>

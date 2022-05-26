@@ -1,11 +1,21 @@
 import React from 'react';
 import "./Start.css"
+import { useNavigate } from 'react-router-dom';
 
 export const Start = () => {
     const [roomid, setroomid] = React.useState("")
-
+    const navigate = useNavigate();
     const roomhandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setroomid(() => e.target.value)
+    }
+
+    const gotoapp = () => {
+        if (roomid == "") {
+            alert("ルームIDを入力してください")
+        } else {
+            console.log("aaaa",roomid)
+            navigate("/app", { state: { id: roomid } })
+        }
     }
 
     return (
@@ -14,8 +24,7 @@ export const Start = () => {
             <div>
                 <input type="text" value={roomid} onChange={roomhandleChange} />
             </div>
-            <button>スタート</button>
+            <button onClick={gotoapp}>スタート</button>
         </div >
     )
-    
 }
