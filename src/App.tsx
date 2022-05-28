@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { getDatabase, ref, set, get, child } from "firebase/database";
 import './App.css';
 import { Card } from './Card';
+import { useNavigate } from 'react-router-dom';
 import  Tinder  from './Tinder'
 
 const firebaseConfig = {
@@ -54,37 +55,7 @@ export const App = () => {
   }]
 
   const [getValue, setgetValue] = React.useState<restaurantinfo[]>(a) 
-
-
-  useEffect(() => {
-    const dbRef = ref(getDatabase());
-    console.log(roomid.id)
-    if (roomid.id === undefined || roomid.id.length < 1) {
-      
-    } else {
-      get(child(dbRef, 'users/' + roomid.id + "/")).then((DataSnapshot) => {
-        if (DataSnapshot.exists()) {
-          // console.log(DataSnapshot.val());
-          DataSnapshot.forEach((element: any) => {
-            console.log(element.val().id)
-            if (element.val().url != undefined) {
-              firedata.push(String(element.val().url))
-            }
-          })
-          setfiredata(firedata)
-          console.log("firebaseと通信")
-
-        } else {
-          console.log("No data available");
-        }
-      }
-      ).catch((error) => {
-
-      });
-      console.log(firedata)
-    }
-  }, [cardnumber])
-
+  const navigate = useNavigate();
 
 
   useEffect(() => { 
@@ -112,26 +83,18 @@ export const App = () => {
     setsenddata(() => e.target.value)
   }
 
-  const renderfire = firedata.map((fire,index) => {
-    return (
-      <div className="resultCard">
-        <p>
-          {Array.from(new Set(firedata))[index]}
-        </p>
-      </div>
-    )
-  })
+  const gotoresult = () => {
+    navigate("/result", { state: { id: roomid.id } })
+  }
+
+
 
   if (getValue.length <= 5) {
     return (
       <div className="App">
         <header className="App-header">
-          <button onClick={() => writedata(senddata)}>送信</button>
         </header>
         <body>
-          <div>
-            {firedata}
-          </div>
         </body>
       </div>
     )
@@ -143,10 +106,8 @@ export const App = () => {
         </header>
         <body>
           <div>
-            {renderfire}
-          </div>
-          <div>
             <Card information={Array.from(new Set(getValue))} parecardnumber={cardnumber} parehandlechange={setcardnumber} roomid={roomid.id}></Card>
+            <button onClick={gotoresult}>終了</button>
           </div>
         </body>
       </div>

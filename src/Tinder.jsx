@@ -40,9 +40,9 @@ function Advanced (props) {
   const axios = require('axios');
 // https://hotpeppertabecard.azurewebsites.net
   const sendtime =  (id, time) => {
-    const url = "https://hotpeppertabecard.azurewebsites.net/time"
-    const json = JSON.stringify({  resid: id,time: time})
-    axios.post(url,json)
+    const url = "http://127.0.0.1:5000/time"
+    const json = {resid: id,time: String(time)}
+        axios.post(url,json)
       .then(() => {
         console.log("sccsess")
       })
@@ -72,7 +72,7 @@ function Advanced (props) {
     updateCurrentTime(time)
     if (direction === "right"){
       writedata(nameToDelete, elapsedtime)
-      sendtime(id,elapsedtime)
+      // sendtime(id,elapsedtime)
     }
 
 
