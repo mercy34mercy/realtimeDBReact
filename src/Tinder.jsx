@@ -37,6 +37,17 @@ function Advanced (props) {
 
   const canSwipe = currentIndex >= 0
 
+  const axios = require('axios');
+// https://hotpeppertabecard.azurewebsites.net
+  const sendtime =  (id, time) => {
+    const url = "https://hotpeppertabecard.azurewebsites.net/time"
+    const json = JSON.stringify({  resid: id,time: time})
+    axios.post(url,json)
+      .then(() => {
+        console.log("sccsess")
+      })
+    }
+
   const writedata = (name,time) => {
     const firedb = getDatabase()
     if (props.id === undefined || props.id.length < 1) {
@@ -51,7 +62,7 @@ function Advanced (props) {
   }
 
   // set last direction and decrease current index
-  const swiped = (direction, nameToDelete, index) => {
+  const swiped = (direction, nameToDelete,id, index) => {
     setLastDirection(direction)
     updateCurrentIndex(index - 1)
     
@@ -61,6 +72,7 @@ function Advanced (props) {
     updateCurrentTime(time)
     if (direction === "right"){
       writedata(nameToDelete, elapsedtime)
+      sendtime(id,elapsedtime)
     }
 
 
@@ -108,7 +120,7 @@ function Advanced (props) {
             ref={childRefs[index]}
             className='swipe'
             key={character.name}
-            onSwipe={(dir) => swiped(dir, character.name, index)}
+            onSwipe={(dir) => swiped(dir, character.name,character.id, index)}
             onCardLeftScreen={() => {outOfFrame(character.name, index);console.log(character);console.log("lastDirection");console.log(lastDirection)}}
           >
             <div

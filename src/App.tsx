@@ -43,12 +43,14 @@ export const App = () => {
     logo: string,
     name: string,
     photo: string
+    id:string
   }
   
   const a: restaurantinfo[] = [{
     name: "a",
     logo: "b",
-    photo:"s"
+    photo: "s",
+    id:"g"
   }]
 
   const [getValue, setgetValue] = React.useState<restaurantinfo[]>(a) 
@@ -88,14 +90,15 @@ export const App = () => {
   useEffect(() => { 
     const access = async () => {
       setgetValue([])
-      const response = await fetch("https://tabecardhotpepper.azurewebsites.net/");
+      const response = await fetch("https://hotpeppertabecard.azurewebsites.net");
       const body = await response.json();
       const responsejson:restaurantinfo[] = body["data"]
       responsejson.forEach((elements,index) => {
         const data: restaurantinfo = {
           logo: elements.logo,
           name: elements.name,
-          photo: elements.photo
+          photo: elements.photo,
+          id:elements.id
         }
         getValue.push(data)
       })
