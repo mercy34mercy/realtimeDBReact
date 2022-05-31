@@ -7,7 +7,7 @@
 }
 
 body {
-    background: #CCFBFE;
+    background: #FFFFFF;
     overflow: hidden;
     font-family: sans-serif;
 }
@@ -142,3 +142,5 @@ body {
 .fa-remove {
     color: #CDD6DD;
 }
+
+

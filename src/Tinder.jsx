@@ -3,6 +3,17 @@ import TinderCard from 'react-tinder-card'
 import './Tinder.css'
 import { getDatabase, ref, set } from "firebase/database";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyAopZTSO6fDpfHhyQ5csKE1MSTwxDLV7eg",
+  authDomain: "tabecard.firebaseapp.com",
+  databaseURL: "https://tabecard-default-rtdb.firebaseio.com",
+  projectId: "tabecard",
+  storageBucket: "tabecard.appspot.com",
+  messagingSenderId: "697210402988",
+  appId: "1:697210402988:web:5d7a2faeaee03e61164709",
+  measurementId: "G-XJL2X9RS58"
+};
+
 function Advanced (props) {
   let db = props.db
   // console.log("db",db)
