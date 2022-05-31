@@ -1,6 +1,7 @@
 import React from 'react';
 import "./Start.css"
 import { useNavigate } from 'react-router-dom';
+import { QrCodeGenerater } from './QrCode'
 
 export const Start = () => {
     const [roomid, setroomid] = React.useState("")
@@ -25,6 +26,9 @@ export const Start = () => {
                 <input type="text" value={roomid} onChange={roomhandleChange} />
             </div>
             <button onClick={gotoapp}>スタート</button>
+            <div>
+                <QrCodeGenerater qrtext={ roomid }/>
+            </div>
         </div >
     )
 }
