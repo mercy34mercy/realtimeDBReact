@@ -6,6 +6,7 @@ import { QrCodeGenerater } from './QrCode'
 export const Start = () => {
     const [roomid, setroomid] = React.useState("")
     const navigate = useNavigate();
+    const URL:string = "http://localhost:3000/app?id="
     const roomhandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setroomid(() => e.target.value)
     }
@@ -19,6 +20,10 @@ export const Start = () => {
         }
     }
 
+    const gotoqrcodereader = () => {
+        navigate("/qrcodereader")
+    }
+
     return (
         < div className='start'>
             <p>roomid</p>
@@ -27,7 +32,10 @@ export const Start = () => {
             </div>
             <button onClick={gotoapp}>スタート</button>
             <div>
-                <QrCodeGenerater qrtext={ roomid }/>
+                <QrCodeGenerater qrtext={ URL + roomid }/>
+            </div>
+            <div>
+                <button onClick={gotoqrcodereader}>QRを読み取る</button>
             </div>
         </div >
     )
